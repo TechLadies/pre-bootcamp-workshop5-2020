@@ -61,9 +61,7 @@ explain nodejs exports/imports
   module.exports = router
 ```
 
-### Let's create another route
-
-Let's try to create the one Jen used in her vue workshop
+### Let's create another route to return dog images
 
 - Create a `breeds.js` folder in routes
 - add code to it
@@ -73,21 +71,43 @@ Let's try to create the one Jen used in her vue workshop
   const { route } = require('.')
   const router = express.Router()
 
-  const IMAGES = [
-    "https:\/\/images.dog.ceo\/breeds\/ridgeback-rhodesian\/n02087394_8935.jpg",
-    "https:\/\/images.dog.ceo\/breeds\/samoyed\/n02111889_1374.jpg",
-    "https:\/\/images.dog.ceo\/breeds\/lhasa\/n02098413_4651.jpg",
-    "https:\/\/images.dog.ceo\/breeds\/finnish-lapphund\/mochilamvan.jpg",
-    "https:\/\/images.dog.ceo\/breeds\/whippet\/n02091134_13376.jpg",
+  const DOGS = [
+    {
+      breed: 'chihuahua',
+      image: 'https://raw.githubusercontent.com/jigsawpieces/dog-api-images/master/chihuahua/n02085620_10074.jpg',
+    },
+    {
+      breed: 'chow',
+      image: 'https://github.com/jigsawpieces/dog-api-images/blob/master/chow/modi2.jpg',
+
+    },
+    {
+      breed: 'rottweiler',
+      image: 'https://github.com/jigsawpieces/dog-api-images/blob/master/rottweiler/n02106550_1033.jpg'
+    },
+    {
+      breed: 'golden-retriever',
+      image: 'https://github.com/jigsawpieces/dog-api-images/blob/master/retriever-golden/n02099601_100.jpg'
+    },
+    {
+      breed: 'husky',
+      image: 'https://github.com/jigsawpieces/dog-api-images/blob/master/husky/n02110185_10047.jpg'
+    }
   ]
+
 
   router.get('/heartbeat', async(req, res) => {
     res.json({ status: 'ok' })
   })
 
+  router.get('/images', async(req, res) => {
+    const dogImages = DOGS.map((dog) => dog.image)
+    return dogImages
+  })
+
   router.get('/images/random', async (req, res) => {
     // get a random dog image
-    const randomDogImage = IMAGES[Math.floor(Math.random() * IMAGES.length)];
+    const randomDogImage = DOGS[Math.floor(Math.random() * IMAGES.length)].image;
     const response = {
       message: randomDogImage,
       status: "success",
