@@ -1,7 +1,7 @@
 
 const express = require('express')
 const indexRouter = require('./routes/index')
-const breedsRouter = require('./routes/breeds')
+const dogsRouter = require('./routes/dogs')
 
 const app = express();
 
@@ -18,7 +18,7 @@ const app = express();
 app.use('/', indexRouter)
 
 /* GET breed routes. */
-app.use('/api/breeds', breedsRouter)
+app.use('/api/dogs', dogsRouter)
 
 
 app.listen(3001, () => {
