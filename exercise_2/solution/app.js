@@ -5,15 +5,6 @@ const dogsRouter = require('./routes/dogs')
 
 const app = express();
 
-/**
- * Step 3:
- * Moved to ./routes/index after refactoring
- */
-// const router = express.Router()
-// router.get('/', function (req, res) {
-//   res.json({ message: 'Welcome to TechLadies' })
-// })
-
 /* GET home page. */
 app.use('/', indexRouter)
 
