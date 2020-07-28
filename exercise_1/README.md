@@ -31,7 +31,7 @@ To exit, press `Ctrl+C` twice
 
 #### #2 Create a Node.js script
 
-Create a file `index.js` with the following code:
+Create a file `app.js` with the following code:
 
 ```node
 console.log('I love to code!')
@@ -39,7 +39,7 @@ console.log('I love to code!')
 
 Save it.
 
-Now, in your terminal, type `node index.js`.
+Now, in your terminal, type `node app.js`.
 
 You should see your message printed on the terminal.
 
@@ -51,17 +51,17 @@ Let's create a node.js project with npm. Type `npm init` to create a new node.js
 
 You should now have a `package.json` file.
 
-Let's go ahead and add a script to our `package.json` to run `node index.js` when we type `npm start`.
+Let's go ahead and add a script to our `package.json` to run `node app.js` when we type `npm start`.
 
 ```json
 {
   "name": "solution",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
      // add the line below
-    "start": "node index.js",
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
