@@ -2,14 +2,15 @@
 
 #### Getting started
 
-We've added a `nodejs-starter` folder, based-off the TechLadies [nodejs-starter-kit]() to fasttrack you into working with your database. It already contains the routes we've built in our previous exercises - you can find them in the `src` folder
+To get you up and running quickly with the database,
+we have added the `nodejs-starter` (derived from the [TechLadies nodejs-starter-kit](https://github.com/TechLadies/nodejs-backend-starterkit)). It already contains code to setup, seed and connect to your database. It also has the routes built in the previous exercises. You can find `app.js` and `routes` inside the `src` folder of the `nodejs-starter`
 
-To set it up, please follow the steps outlined
+The `nodejs-starter` requires some setup. Please follow the steps below:
 
-1. Change directory to `nodejs-starter` and run `npm install`
-2. We created a database called `techladies` in our first exercise. Verify that the `knexfile.js` is initialized with the same database name. If you used a different name, please change this value to be the same as your database's name.
-3. Copy `env.sample` to `.env` and add your `DB_USERNAME` and `DB_PASSWORD`
-4. Run the following commands to prepare the databases and seed them with some dummy data
+1. Navigate to the `nodejs-starter` and run `npm install`
+2. We created a database called `techladies` in our first exercise. Verify that the `knexfile.js` is initialized with the same database name. If you used a different name, please change this value to be one that you used.
+3. Create a new file called `.env`. Copy the contents from `env.sample` to `.env` and add your `DB_USERNAME` and `DB_PASSWORD` to it
+4. Run the following commands in the terminal to prepare the databases and seed them with some dummy data
 	```
 	NODE_ENV=development npm run db:migrate
 	NODE_ENV=development npm run db:seed
@@ -22,15 +23,15 @@ To set it up, please follow the steps outlined
 > - After copying `.env` file, open it up and update the `DB_USER` and > `DB_PASSWORD` to what you have set for your Postgres root user in Windows.
 
 
-#### #1 Connect dogRouter to your database
+#### #1 Working with the database
 
 Start `Postico`.
 
-In the `techladies` database, verifiy that you have two tables - `dogs` and `users`. These have been created by the `npm run db:migrate` and `npm run db:seed` commands that we ran initially.
+In the `techladies` database, verify that you have two tables - `dogs` and `users`. These have been created by the `npm run db:migrate` and `npm run db:seed` commands that we ran initially. If you don't see the tables, try refreshing your view.
 
-We'll now use our `dogs` table to get the data for our dog-based routes.
+Instead of the static array for our dogs data, we'll now use the data stored in our `dogs` table for our routes.
 
-Modify the routes in `src/routes/dogs.js` to use the database, as shown below,
+Modify the routes in `src/routes/dogs.js`, as shown below,
 
 ```node
 const express = require('express')
@@ -70,17 +71,17 @@ Save the changes and verify that all your routes still work.
 
 Bravo! You have now unlocked the database superpower in your developer journey! :tada:
 
-#### #2 Use Postman to check your routes
+#### #2 Use Postman
 
-It can be tiring to constantly check the browser for every route. It is also limiting because we cannot use this method efficiently to test for routes that create, update or delete data.
+It can be tiring to keep testing each route on the browser. It is also limiting because we cannot use this method efficiently to test requests other than `GET`
 
-Use Postman to create a collection of routes - so that we can easily check them.
+Use Postman to create a collection of all the routes you've created so far.
 
 #### #3 Add a route to create data
 
-Let's add a route to create a new dog.
+Now, let us add a route to create a new dog.
 
-Add the following route in your `src/routes/dogs.js` file.
+Add the following code in your `src/routes/dogs.js` file.
 
 ```node
 router.post('/', async (req, res) => {
@@ -93,7 +94,7 @@ router.post('/', async (req, res) => {
 })
 ```
 
-Try to create a new dog using the following data, with a Postman `POST` to `http://localhost:3001/api/dogs/`
+Try to `POST` a new dog with the following properties to `http://localhost:3001/api/dogs` using Postman
 
 ```
 {
