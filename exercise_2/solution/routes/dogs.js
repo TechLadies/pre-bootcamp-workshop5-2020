@@ -35,8 +35,8 @@ router.get('/images', async(req, res) => {
 })
 
 router.get('/images/random', async (req, res) => {
-  // get a random dog image
-  const randomDogImage = DOGS[Math.floor(Math.random() * DOGS.length)].image;
+  const randomDogIndex = Math.floor(Math.random() * DOGS.length)
+  const randomDogImage = DOGS[randomDogIndex].image;
   const response = {
     message: randomDogImage,
     status: "success",
