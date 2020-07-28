@@ -10,7 +10,7 @@ Type ".help" for more information.
 >
 ```
 
-Try typing some code in the console for eg, `console.log('Hello TechLadies!')`
+Let's try typing some code in the console - `console.log('Hello TechLadies!')`
 
 ```node
 Welcome to Node.js v12.18.2.
@@ -23,8 +23,8 @@ You should see your message printed out
 ```node
 Welcome to Node.js v12.18.2.
 Type ".help" for more information.
-> console.log('Hello World, from TechLadies.')
-Hello, World, from TechLadies
+> console.log('Hello TechLadies!')
+Hello TechLadies!
 ```
 
 To exit, press `Ctrl+C` twice
@@ -47,20 +47,21 @@ Congratulations! You've created your first node.js script! :tada: :tada:
 
 #### #3 Create a Node.js project
 
-Let's create a node.js project with npm. Type `npm init` to create a new node.js project. Accept defaults for all fields in the `package.json` file, by pressing enter.
+Let's create a node.js project with `npm`. Type `npm init` to create a new node.js project. Accept defaults for all fields in the `package.json` file, by pressing enter.
 
 You should now have a `package.json` file.
 
 Let's go ahead and add a script to our `package.json` to run `node app.js` when we type `npm start`.
+
+Add `"start": "node app.js",` to the `scripts` object. Your `package.json` should now look like this:
 
 ```json
 {
   "name": "solution",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
-     // add the line below
     "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -77,11 +78,11 @@ Now type `npm start` in your terminal, and your should see your message printed 
 
 Start Postico. You should see all your databases listed.
 
-Let's create a new `database` for ourselves.
+Let's create a new database for ourselves.
 
 Click on the `+Database` button and add a database called `techladies`.
 
-You should now see a new database in your view. Click on that to view the contents of your database.
+You should now see a new database in your view (use the refresh button if you don't). Double-click on the created database to view the contents of your database.
 
 Now, we'll add a `table` to our database.
 
@@ -89,7 +90,6 @@ Click on the `+Table` button to add a table and populate it with some data.
 
 Bravo! You now have your own database with some data! :tada: :tada: :grin:
 
+#### Additional Task
 
-### Recommended Readings
-
-- [MDN](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/development_environment)
+Try out a few SQL queries to query data in your new table!
