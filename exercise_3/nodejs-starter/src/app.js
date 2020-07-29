@@ -19,10 +19,7 @@ app.use(cookieParser())
 
 /* GET home page. */
 app.use('/', indexRouter)
-
-/* GET breed routes. */
-app.use('/api/dogs', dogsRouter)
-
 app.use('/users', usersRouter)
+app.use('/api/dogs', dogsRouter)
 
 module.exports = app

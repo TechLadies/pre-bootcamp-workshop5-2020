@@ -1,48 +1,16 @@
 const express = require('express')
+const dogs = require('../helpers/dogs')
 const router = express.Router()
-const db = require('../models/dog')
 
 router.get('/', async (req, res) => {
-  const dogs = await db.Dog.query().select('breed', 'image')
-  res.json(dogs)
+  const breed = req.query.breed
+  const result = breed ? dogs.getDogsByBreed(breed) : dogs.getAllDogs()
+  res.status(200).json(result)
 })
 
-router.post('/', async (req, res) => {
-  try {
-    const response = await db.Dog.query().insert(req.body)
-    res.json(response)
-  } catch (ex) {
-    res.status(500).json({ error: ex })
-  }
-})
-
-router.delete('/:id', async (req, res) => {
-  try {
-    const response = await db.Dog.query().where('id', req.params.id).del()
-    res.json(response)
-  } catch (ex) {
-    res.status(500).json({ error: ex })
-  }
-})
-
-router.get('/images', async (req, res) => {
-  const dogImages = await db.Dog.query().pluck('image')
-  res.json(dogImages)
-})
-
-router.get('/images/random', async (req, res) => {
-  // get a random dog image
-  const randomDogImages = await db.Dog.query().orderByRaw('RANDOM()').limit(1).pluck('image')
-  const response = {
-    message: randomDogImages[0],
-    status: 'success'
-  }
-
-  res.json(response)
-})
-
-router.get('*', async (req, res) => {
-  res.status(404).json({ message: 'resource not found' })
+router.get('/:id', async (req, res) => {
+  const result = dogs.getDogById(req.params.id)
+  res.status(200).json(result)
 })
 
 module.exports = router
