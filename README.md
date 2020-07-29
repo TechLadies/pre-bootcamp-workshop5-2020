@@ -3,6 +3,8 @@
 
 > Coming soon!
 
+[Slides](https://docs.google.com/presentation/d/1RKVNADs6k3WnYHIZGOynv9fR2lpNzNflnJzWmPEDOkI/edit?usp=sharing)
+
 ### Contents
 
 1. [Frontend vs Backend](#frontend-vs-backend)
