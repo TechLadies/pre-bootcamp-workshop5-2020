@@ -1,46 +1,30 @@
-const DOGS = [
-  {
-    id: 1,
-    breed: 'chihuahua',
-    image: 'https://raw.githubusercontent.com/jigsawpieces/dog-api-images/master/chihuahua/n02085620_10074.jpg',
-  },
-  {
-    id: 2,
-    breed: 'chow',
-    image: 'https://github.com/jigsawpieces/dog-api-images/blob/master/chow/modi2.jpg',
+const db = require('../models/dog')
 
-  },
-  {
-    id: 3,
-    breed: 'rottweiler',
-    image: 'https://github.com/jigsawpieces/dog-api-images/blob/master/rottweiler/n02106550_1033.jpg'
-  },
-  {
-    id: 4,
-    breed: 'golden-retriever',
-    image: 'https://github.com/jigsawpieces/dog-api-images/blob/master/retriever-golden/n02099601_100.jpg'
-  },
-  {
-    id: 5,
-    breed: 'husky',
-    image: 'https://github.com/jigsawpieces/dog-api-images/blob/master/husky/n02110185_10047.jpg'
-  }
-]
-
-function getDogsByProperty(property, value) {
-  return DOGS.filter(dog => dog[property] === value)
+exports.getAllDogs = async function () {
+  const dogs = await db.Dog.query().select()
+  return dogs
 }
 
-exports.getAllDogs = function() {
-  return DOGS
-}
-
-exports.getDogById = function(id) {
-  const dogsById = getDogsByProperty('id', parseInt(id))
+exports.getDogById = async function (id) {
+  const dogsById = await db.Dog.query().select().where('id', id)
   return dogsById[0] || 'Not found'
 }
 
-exports.getDogsByBreed = function(breed) {
-  const dogsByBreed = getDogsByProperty('breed', breed)
+exports.getDogsByBreed = async function (breed) {
+  const dogsByBreed = await db.Dog.query().select().where('breed', breed)
   return dogsByBreed
+}
+
+exports.addDog = async function (dog) {
+  try {
+    const response = await db.Dog.query().insert(dog)
+    return response
+  } catch (err) {
+    return { err }
+  }
+}
+
+exports.deleteDog = async function (id) {
+  const response = await db.Dog.query().where('id', id).del()
+  return response
 }

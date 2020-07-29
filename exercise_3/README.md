@@ -29,39 +29,47 @@ Start `Postico`.
 
 In the `techladies` database, verify that you have two tables - `dogs` and `users`. These have been created by the `npm run db:migrate` and `npm run db:seed` commands that we ran initially. If you don't see the tables, try refreshing your view.
 
-Instead of the static array for our dogs data, we'll now use the data stored in our `dogs` table for our routes.
+The dog routes use functions from a helper file at `src/helpers/dogs.js`. Open up this file and have a look the code.
 
-Modify the routes in `src/routes/dogs.js`, as shown below,
+You'll now change the functions in this file to use data from our `dogs` table for our routes instead of using a static array.
+
+Update the file `src/helpers/dogs.js`, with the following code
 
 ```node
-const express = require('express')
-const router = express.Router()
 const db = require('../models/dog')
 
+exports.getAllDogs = async function() {
+  const dogs = await db.Dog.query().select()
+  return dogs
+}
+
+exports.getDogById = async function(id) {
+  const dogsById = await db.Dog.query().select().where('id', id)
+  return dogsById[0] || 'Not found'
+}
+
+exports.getDogsByBreed = async function(breed) {
+  const dogsByBreed = await db.Dog.query().select().where('breed', breed)
+  return dogsByBreed
+}
+```
+
+Since the functions are now asynchronous, you'll also need to modify your `src/routes/dogs` file to `await` the functions, as show below:
+
+```
+const express = require('express')
+const dogs = require('../helpers/dogs')
+const router = express.Router()
+
 router.get('/', async (req, res) => {
-	const dogs = await db.Dog.query().select('breed', 'image')
-	res.json(dogs)
+  const breed = req.query.breed
+  const result = breed ? await dogs.getDogsByBreed(breed) : await dogs.getAllDogs()
+  res.status(200).json(result)
 })
 
-router.get('/images', async (req, res) => {
-	const dogImages = await db.Dog.query().pluck('image')
-	res.json(dogImages)
-})
-
-router.get('/images/random', async (req, res) => {
-	// get a random dog image
-	const randomDogImages = await
-		db.Dog.query()
-		.orderByRaw('RANDOM()')
-		.limit(1)
-		.pluck('image')
-
-	const response = {
-		message: randomDogImages[0],
-		status: 'success'
-	}
-
-	res.json(response)
+router.get('/:id', async (req, res) => {
+  const result = await dogs.getDogById(req.params.id)
+  res.status(200).json(result)
 })
 
 module.exports = router
@@ -73,7 +81,7 @@ Bravo! You have now unlocked the database superpower in your developer journey! 
 
 #### #2 Use Postman
 
-It can be tiring to keep testing each route on the browser. It is also limiting because we cannot use this method efficiently to test requests other than `GET`
+It can be tiring to keep testing each route on the browser. It is also limiting because it cannot be used efficiently to test requests other than `GET`
 
 Use Postman to create a collection of all the routes you've created so far.
 
@@ -81,17 +89,57 @@ Use Postman to create a collection of all the routes you've created so far.
 
 Now, let us add a route to create a new dog.
 
-Add the following code in your `src/routes/dogs.js` file.
+Add the following function in your `src/helpers/dogs.js` file.
+
+```node
+exports.addDog = async function(dog) {
+  try {
+    const response = await db.Dog.query().insert(dog)
+    return response
+  } catch(err) {
+    return { err }
+  }
+}
+```
+
+... and a corresponding route in your `src/routes/dogs.js` file to use this function,
 
 ```node
 router.post('/', async (req, res) => {
-	try {
-		const response = await db.Dog.query().insert(req.body)
-		res.json(response)
-	} catch (ex) {
-		res.status(500).json({ error: ex })
-	}
+  const result = await dogs.addDog(req.body)
+
+  // handle error
+  if (result.err) {
+    const err = result.err
+    if (err instanceof UniqueViolationError) {
+      res.status(409).send({
+        message: err.message,
+        type: 'UniqueViolation',
+        data: {
+          columns: err.columns,
+          table: err.table,
+          constraint: err.constraint
+        }
+      })
+    } else {
+      res.status(500).send({
+        message: err.message,
+        type: 'UnknownError',
+        data: {}
+      });
+    }
+
+    return
+  }
+
+  res.status(200).json(result)
 })
+```
+
+The above code checks for a `UniqueViolationError`. So, remember import that in your dog routes file, at the top.
+
+```
+const { UniqueViolationError } = require('objection')
 ```
 
 Try to `POST` a new dog with the following properties to `http://localhost:3001/api/dogs` using Postman
@@ -117,32 +165,39 @@ Remember this `id`.
 
 You can also check the `dogs` table in your database to verify that the dog was added to the table.
 
-Try to make the same request again. This time, you'll receive a `UniqueViolationError` error because the dog image already exists in our database
+Try to make the same request again. This time, you'll receive a `UniqueViolationError` error because the dog image already exists in our database. The `try...catch` block helps us handle this error and return a suitable response
 
 #### #4 Delete a dog
 
-We'll now attempt to delete the dog we just created.
+You'll now attempt to delete the dog you just created.
 
-Add the following route in your `src/routes/dogs.js` file.
+Add the function below into your `src/helpers/dogs.js` file:
+
+```node
+exports.deleteDog = async function(id) {
+  const response = await db.Dog.query().where('id', id).del()
+  return response
+}
+```
+
+and now add a route to use the function in `src/routes/dogs.js` file
 
 ```node
 router.delete('/:id', async (req, res) => {
-	try {
-		const response = await db.Dog.query().where('id', req.params.id).del()
-		res.json(response)
-	} catch (ex) {
-		res.status(500).json({ error: ex })
-	}
+  const response = await dogs.deleteDog(req.params.id)
+  res.json(response)
 })
 ```
 
-Now use Postman to send a `DELETE` request to `http://localhost:3001/api/dogs/:id` where `:id` is id of the dog from the last step, for eg `http://localhost:3001/api/dogs/21`
+Use Postman to send a `DELETE` request to `http://localhost:3001/api/dogs/:id` where `:id` is id of the dog from the last step, for eg `http://localhost:3001/api/dogs/21`
 
 If the dog is successfully deleted, you'll recieve `1` as a response.
 
 If no dogs were deleted, you'll receive `0`
 
 
-### Time to celebrate!
+### Time to celebrate! :tada: :tada: :tada: :tada:
 
-Thanks for sticking around till the end of this workshop!
+Kudos to you on completing the workshop!
+
+[![LGTM](https://lgtm.lol/p/584)](https://lgtm.lol/i/584)

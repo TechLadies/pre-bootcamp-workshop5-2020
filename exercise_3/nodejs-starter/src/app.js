@@ -6,8 +6,8 @@ const logger = require('morgan')
 const cors = require('cors')
 
 const indexRouter = require('./routes/index')
-const dogsRouter = require('./routes/dogs')
 const usersRouter = require('./routes/users')
+const dogsRouter = require('./routes/dogs')
 
 const app = express()
 

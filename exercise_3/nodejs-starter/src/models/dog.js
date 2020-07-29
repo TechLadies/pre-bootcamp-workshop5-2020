@@ -8,10 +8,6 @@ class Dog extends Model {
     return tableName
   }
 
-  breed () {
-    return this.breed
-  }
-
   static get jsonSchema () {
     return {
       type: 'object',
