@@ -1,6 +1,8 @@
 ## Exercise 2 - Introduction to Express
 
-#### #1 Install Express as an `npm` dependency
+Navigate into the `starter-code` folder for this exercise
+
+#### #1 Create an Express web application
 
 Type `npm install express --save` in the terminal and press enter.
 
@@ -17,7 +19,7 @@ found 0 vulnerabilities
 
 Open your `package.json`. Verify that there is new entry `"express": "^4.17.1"` under `dependencies`.
 
-```nodeon
+```json
 {
   "name": "solution",
   "version": "1.0.0",
@@ -34,10 +36,6 @@ Open your `package.json`. Verify that there is new entry `"express": "^4.17.1"` 
   }
 }
 ```
-
-Celebrate! You just added your first `npm` dependency succesfully!
-
-#### #2 Create an Express web application
 
 In your `app.js` file, copy the following code
 
@@ -74,7 +72,7 @@ Start the server again with `npm start` and refresh your browser. You should now
 **Bonus Tip:**
 To avoid having to restart your server everytime you change `app.js`, install `nodemon` as a dev dependency and update your start script to use `nodemon` instead of `node`. `nodemon` will watch your files for changes and restart the server automatically when required.
 
-#### #3 Understanding middleware
+#### #2 Understanding middleware
 
 Let's now use Router-level middleware for our routes.
 
@@ -111,70 +109,38 @@ app.listen(3001, () => {
 })
 ```
 
-Verify `http://localhost:3001/` is still working as before.
+Verify `http://localhost:3001/` still works as before.
 
-### #4 Add some more rotes
+### #3 Add some more rotes
 
 Let's add some more routes now!
 
 We'll try to create an api similar to the one we used in our [Vue.js workshop](https://workshops.vuevixens.org/workshops/vue/minis/mini1.html#install-vuetify).
 
 Here's a summary of what we'll be making:
-| Route       | Description |
-| ----------- | ----------- |
-| /api/dogs/      | Return data on all dogs          |
-| /api/dogs/images   | Return images of all dogs        |
-| /api/dogs/random   | Return a random dog image        |
+
+| Name       | Method | Query Params | Description |
+| ----------- | ---- | --- | ----------- |
+| /api/dogs/      | GET | breed (optional) | Return data on all dogs          |
+| /api/dogs/:id   | GET |  | Return a dog by id       |
 
 
 In the `routes` folder, add a file called `dogs.js` with the following code,
 
 ```node
 const express = require('express')
+const dogs = require('../helpers/dogs')
 const router = express.Router()
 
-const DOGS = [
-  {
-    breed: 'chihuahua',
-    image: 'https://raw.githubusercontent.com/jigsawpieces/dog-api-images/master/chihuahua/n02085620_10074.jpg',
-  },
-  {
-    breed: 'chow',
-    image: 'https://github.com/jigsawpieces/dog-api-images/blob/master/chow/modi2.jpg',
-
-  },
-  {
-    breed: 'rottweiler',
-    image: 'https://github.com/jigsawpieces/dog-api-images/blob/master/rottweiler/n02106550_1033.jpg'
-  },
-  {
-    breed: 'golden-retriever',
-    image: 'https://github.com/jigsawpieces/dog-api-images/blob/master/retriever-golden/n02099601_100.jpg'
-  },
-  {
-    breed: 'husky',
-    image: 'https://github.com/jigsawpieces/dog-api-images/blob/master/husky/n02110185_10047.jpg'
-  }
-]
-
-router.get('/', async(req, res) => {
-  res.json(DOGS)
+router.get('/', async (req, res) => {
+  const breed = req.query.breed
+  const result = breed ? dogs.getDogsByBreed(breed) : dogs.getAllDogs()
+  res.status(200).json(result)
 })
 
-router.get('/images', async(req, res) => {
-  const dogImages = DOGS.map((dog) => dog.image)
-  res.json(dogImages)
-})
-
-router.get('/images/random', async (req, res) => {
-  const randomDogIndex = Math.floor(Math.random() * DOGS.length)
-  const randomDogImage = DOGS[randomDogIndex].image;
-  const response = {
-    message: randomDogImage,
-    status: "success",
-  }
-
-  res.json(response)
+router.get('/:id', async (req, res) => {
+  const result = dogs.getDogById(req.params.id)
+  res.status(200).json(result)
 })
 
 module.exports = router
@@ -185,17 +151,12 @@ Import and use your new routes in `app.js`
 ```node
 const express = require('express')
 const indexRouter = require('./routes/index')
-// TODO: Add this
 const dogsRouter = require('./routes/dogs')
 
 const app = express();
 
 app.use('/', indexRouter)
-
-// Add this:
-/* GET breed routes. */
 app.use('/api/dogs', dogsRouter)
-
 
 app.listen(3001, () => {
   console.log('Example app listening on port 3001!')
@@ -204,11 +165,10 @@ app.listen(3001, () => {
 
 Visit the following paths and verify that they work!
 
-- `http://localhost:3001/`
-- `http://localhost:3001/api/dogs/images`
-- `http://localhost:3001/api/dogs/images/random`
-
+- `http://localhost:3001/api/dogs/`
+- `http://localhost:3001/api/dogs/?breed=chow`
+- `http://localhost:3001/api/dogs/1`
 
 Awesome!! You are now a route champ! :tada::tada:
 
-> Note: You'll notice that we used a constant array called `DOGS` for our data. This should ideally be stored in a database. We'll learn how to do that in our next exercise.
+> Note: You'll notice that in the `helpers/dogs` file we used a constant array called `DOGS` for our data. This should ideally be stored in a database. We'll learn how to do that in our next exercise.

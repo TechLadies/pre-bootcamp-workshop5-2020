@@ -1,18 +1,16 @@
 {
-  "name": "exercise-2-introduction-to-express",
+  "name": "solution",
   "version": "1.0.0",
-  "description": "This will introduce you to express and routes",
-  "main": "index.js",
+  "description": "",
+  "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js",
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.4"
+    "express": "^4.17.1",
+    "upper-case": "^2.0.1"
   }
 }
