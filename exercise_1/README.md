@@ -78,6 +78,8 @@ Run `npm start` again. Do you see something different? :smile:
 
 #### #4 Interact with your database
 
+##### macOS
+
 Start Postico. You should see all your databases listed.
 
 Let's create a new database for ourselves.
@@ -89,6 +91,22 @@ You should now see a new database in your view (use the refresh button if you do
 Now, we'll add a `table` to our database.
 
 Click on the `+Table` button to add a table and populate it with some data.
+
+##### Windows
+
+Start **pgAdmin**. You should see a database server listed on the left hand panel. By default it is named `PostgresSQL 12`.
+
+Double click on it and enter the password if prompted. You would have set this password some time during or after the installation of pgadmin.
+
+Right click on `Database` and click `Create > Database`. In the window, give your database a name.
+
+Expand the name of your database and open `schemas > public`, then right click on `Tables` and click `Create > Table`.
+
+In the `General` tab, give the table a name, and under the `Columns` tab, click the `+` button to add a column. You can give it any name, and you can choose `character varying` for the Data Type.
+
+Right click on your table in the left panel navigation, and click `Scripts > INSERT Script`. In the text editor on the right, replace the `?` with some data.
+
+---
 
 Bravo! You now have your own database with some data! :tada: :tada: :grin:
 
