@@ -43,7 +43,7 @@ In your `app.js` file, copy the following code
 const express = require('express');
 const app = express();
 
-app.get('/', (req, res) => res.send('Welcome to TechLadies'));
+app.get('/', (req, res) => res.status(200).send('Welcome to TechLadies'));
 
 app.listen(3001, () => {
   console.log('Example app listening on port 3001!')
@@ -60,11 +60,11 @@ Let's go ahead and modify our code to return `json` instead of a `string`.
 
 Remove the following line,
 ```node
-app.get('/', (req, res) => res.send('Welcome to TechLadies'));
+app.get('/', (req, res) => res.status(200).send('Welcome to TechLadies'));
 ```
 and replace with this
 ```node
-app.get('/', (req, res) => res.json({ message: 'Welcome to TechLadies' }));
+app.get('/', (req, res) => res.status(200).json({ message: 'Welcome to TechLadies' }));
 ```
 
 Start the server again with `npm start` and refresh your browser. You should now see your updated message! :clap: :clap:
@@ -86,7 +86,7 @@ const router = express.Router()
 
 /* GET home page. */
 router.get('/', function (req, res) {
-  res.json({ message: 'Welcome to TechLadies' })
+  res.status(200).json({ message: 'Welcome to TechLadies' })
 })
 
 module.exports = router
@@ -111,7 +111,7 @@ app.listen(3001, () => {
 
 Verify `http://localhost:3001/` still works as before.
 
-### #3 Add some more rotes
+### #3 Add some more routes
 
 Let's add some more routes now!
 
