@@ -25,7 +25,7 @@ The `nodejs-starter` requires some setup. Please follow the steps below:
 
 #### #1 Working with the database
 
-Start `Postico`.
+Start `Postico` or `pgAdmin`.
 
 In the `techladies` database, verify that you have two tables - `dogs` and `users`. These have been created by the `npm run db:migrate` and `npm run db:seed` commands that we ran initially. If you don't see the tables, try refreshing your view.
 
@@ -84,6 +84,8 @@ Bravo! You have now unlocked the database superpower in your developer journey! 
 It can be tiring to keep testing each route on the browser. It is also limiting because it cannot be used efficiently to test requests other than `GET`
 
 Use Postman to create a collection of all the routes you've created so far.
+
+Learn how to use Postman [here](https://learning.postman.com/docs/getting-started/introduction/)
 
 #### #3 Add a route to create data
 
