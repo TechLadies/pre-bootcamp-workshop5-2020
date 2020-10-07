@@ -20,6 +20,6 @@ app.use(cookieParser())
 /* GET home page. */
 app.use('/', indexRouter)
 app.use('/users', usersRouter)
-app.use('/api/dogs', dogsRouter)
+app.use('/dogs', dogsRouter)
 
 module.exports = app
