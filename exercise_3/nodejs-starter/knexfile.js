@@ -7,7 +7,7 @@ module.exports = {
     connection: {
       user: process.env.DB_USERNAME || 'postgres',
       password: process.env.DB_PASSWORD,
-      database: 'techladies1',
+      database: 'techladies',
     },
   },
   test: {
@@ -16,7 +16,7 @@ module.exports = {
     connection: {
       user: process.env.DB_USERNAME || 'postgres',
       password: process.env.DB_PASSWORD,
-      database: 'techladies1',
+      database: 'techladies',
     },
   },
 }
